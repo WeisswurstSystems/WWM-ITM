@@ -1,0 +1,87 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="order-chip">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        cursor: default;
+      }
+
+      #chip {
+        display: flex;
+        align-items: center;
+
+        height: 32px;
+        background-color: var(--paper-grey-300);
+        border-radius: 16px;
+      }
+
+      #amount {
+        height: 32px;
+        min-width: 32px;
+        border-radius: 16px;
+        padding: 0 8px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: var(--secondary-color);
+        color: white;
+
+        @apply(--paper-font-subhead);
+      }
+
+      #label {
+        @apply --paper-font-body1;
+        padding-left: 8px;
+        padding-right: 16px;
+      }
+
+      paper-icon-button {
+        height: 32px;
+        width: 32px;
+        padding: 0 8px;
+        color: black;
+      }
+    </style>
+    <div id="chip">
+      <span id="amount">[[amount]]</span>
+      <span id="label">[[label]]</span>
+
+      <dom-if if="[[removable]]">
+        <template><paper-icon-button id="remove" icon="cancel" on-click="remove"></paper-icon-button></template>
+      </dom-if>
+    </div>
+  </template>
+  <script>
+      class OrderChip extends Polymer.Element {
+          static get is() {
+              return 'order-chip'
+          }
+          static get properties() {
+              return {
+                  amount: Number,
+                  label: String,
+                  removable: Boolean
+              }
+          }
+
+          remove() {
+              let remove = new CustomEvent('remove');
+              this.dispatchEvent(remove);
+          }
+      }
+      customElements.define(OrderChip.is, OrderChip)
+  </script>
+</dom-module>

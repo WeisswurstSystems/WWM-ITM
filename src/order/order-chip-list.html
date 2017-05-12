@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<link rel="import" href="order-chip.html">
+
+<dom-module id="order-chip-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      order-chip {
+        margin: 4px;
+      }
+    </style>
+
+    <dom-repeat items="[[order]]">
+    <template>
+      <order-chip amount="[[item.amount]]" label="[[item.label]]"></order-chip>
+    </template>
+    </dom-repeat>
+
+  </template>
+  <script>
+      class OrderChipList extends Polymer.Element {
+          static get is() {
+              return 'order-chip-list'
+          }
+          static get properties() {
+              return {
+                  order: Array
+              }
+          }
+      }
+      customElements.define(OrderChipList.is, OrderChipList)
+  </script>
+</dom-module>

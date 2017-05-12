@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<link rel="import" href="order-chip.html">
+
+<dom-module id="order-chip-edit">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      order-chip {
+        margin: 4px;
+      }
+
+      order-chip-input {
+        display: flex;
+        flex-grow: 1;
+        margin: 4px 4px 4px 8px;
+      }
+    </style>
+
+    <dom-repeat items="[[order]]">
+      <template>
+        <order-chip amount="[[item.amount]]" label="[[item.label]]" removable on-remove="removeOrder"></order-chip>
+      </template>
+    </dom-repeat>
+
+    <order-chip-input on-submit="addOrder" on-remove="removeLastOrder"></order-chip-input>
+
+  </template>
+  <script>
+      class OrderChipEdit extends Polymer.Element {
+          static get is() {
+              return 'order-chip-edit'
+          }
+          static get properties() {
+              return {
+                  order: Array
+              }
+          }
+
+          addOrder(e) {
+              this.push('order',e.detail);
+          }
+          removeOrder(e) {
+              this.splice('order', e.model.index,1);
+          }
+          removeLastOrder() {
+              console.log('asdf');
+              this.splice('order', this.order.length -1 , 1);
+          }
+      }
+      customElements.define(OrderChipEdit.is, OrderChipEdit)
+  </script>
+</dom-module>

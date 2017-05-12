@@ -1,0 +1,162 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
+
+
+<dom-module id="order-chip-input">
+  <template>
+    <style>
+      :host {
+        height: 32px;
+        display: inline-flex;
+        min-width: 128px;
+      }
+
+      input {
+        display: inline-flex;
+        flex-grow: 1;
+        border: none;
+        background: none;
+        padding-right: 16px;
+        height: 32px;
+
+        @apply --paper-font-body1
+      }
+
+      input:focus {
+        outline: none;
+      }
+
+      paper-listbox {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        @apply --shadow-elevation-2dp;
+        background-color: white;
+
+        padding: 0;
+      }
+
+
+      iron-dropdown {
+        width: 192px;
+        height: 100%;
+      }
+
+    </style>
+
+    <input id="orderinput" placeholder="Bestellung hinzufügen" value="{{text::input}}">
+
+    <iron-dropdown id="hint" no-auto-focus no-cancel-on-outside-click vertical-offset="36" allow-outside-scroll>
+        <paper-listbox id="list" selected="{{selected}}" class="dropdown-content">
+          <dom-repeat items="[[possibilities]]">
+            <template>
+              <paper-item on-click="submitByClick">[[item.amount]] [[item.label]]</paper-item>
+            </template>
+          </dom-repeat>
+          <dom-if if="[[!possibilities.length]]" restamp>
+            <template>
+              <paper-item>Nichts gefunden!</paper-item>
+            </template>
+          </dom-if>
+        </paper-listbox>
+    </iron-dropdown>
+
+  </template>
+  <script>
+      class OrderChipInput extends Polymer.Element {
+          static get is() {
+              return 'order-chip-input'
+          }
+
+          static get properties() {
+              return {
+                  text: {
+                      type: String,
+                      observer: 'onText',
+                      value: ''
+                  },
+                  types: {
+                      type: Array,
+                      value: ["Weisswurst", "Breze"]
+                  },
+                  possibilities: {
+                      type: Array,
+                      value: []
+                  }
+              }
+          }
+
+          ready() {
+              this.addEventListener('focus', e => this.open());
+              this.addEventListener('blur', e => this.close());
+              this.addEventListener('keydown', e => {
+                  if (e.keyCode == '38') {
+                      this.shadowRoot.querySelector('#list').selectPrevious();
+                  } else if (e.keyCode == '40') {
+                      this.shadowRoot.querySelector('#list').selectNext();
+                  } else if (e.keyCode == '8' && this.text.length == 0) {
+                      this.close();
+                      let remove = new CustomEvent('remove');
+                      this.dispatchEvent(remove);
+                      this.open();
+                  } else if (e.keyCode == '13' && this.possibilities.length > 0) {
+                      let add = new CustomEvent('submit',{detail: this.possibilities[this.selected]});
+                      this.dispatchEvent(add);
+                      this.close();
+                      this.set('text', '');
+                      this.open();
+                  }
+              });
+              super.ready();
+          }
+
+          submitByClick(e) {
+              let add = new CustomEvent('submit',{detail: this.possibilities[e.model.index]});
+              this.dispatchEvent(add);
+              this.close();
+              this.set('text', '');
+              this.focus();
+          }
+
+          open() {
+              this.shadowRoot.querySelector('#hint').open();
+          }
+
+          close() {
+              this.shadowRoot.querySelector('#hint').close();
+          }
+
+          onText(text) {
+              const regex = new RegExp('([0-9]*)(\\s*)([a-zA-z]*)');
+              const result = text.match(regex);
+              const amount = result[1] || 1;
+              const type = result[3];
+              const predictedTypes = this.types.filter(s => s.toLowerCase().startsWith(type.toLowerCase()))
+
+              var possibilities = [];
+              predictedTypes.forEach(t => {
+                  possibilities.push({
+                      amount: amount,
+                      label: t
+                  })
+              });
+              this.set('possibilities', possibilities);
+              this.set('selected', 0)
+          }
+      }
+
+      customElements.define(OrderChipInput.is, OrderChipInput)
+  </script>
+</dom-module>
+
