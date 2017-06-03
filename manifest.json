@@ -1,0 +1,6 @@
+{
+  "name": "weisswurstverwaltung",
+  "short_name": "weisswurstverwaltung",
+  "start_url": "/",
+  "display": "standalone"
+}

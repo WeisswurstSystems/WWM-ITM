@@ -1,0 +1,107 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+
+<dom-module id="order-cart-item">
+    <template>
+        <style>
+             :host {
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                padding: 8px 16px;
+            }
+
+            :host([none]) {
+                background-color: var(--paper-grey-300);
+            }
+
+        #name {
+                flex-grow: 1;
+                margin-right: 16px;
+                text-overflow: ellipsis;
+
+                @apply --paper-font-subhead;
+            }
+
+            #amount {
+                max-width: 32px;
+            }
+
+        #price {
+            min-width: 64px;
+                margin-left: 16px;
+                @apply --paper-font-code2;
+            }
+
+            #reduce,
+            #add {
+                color: var(--secondary-color);
+            }
+
+            #remove {
+                margin-left: 32px;
+            }
+
+
+        </style>
+
+
+        <div id="name"><slot></slot></div>
+        <paper-icon-button id="reduce" icon="remove" tabindex="-1" on-click="reduce" ></paper-icon-button>
+        <input id="amount" type="number" min="0" value="{{amount::input}}" tabindex="0">
+        <paper-icon-button id="add" icon="add" tabindex="-1" on-click="add" ></paper-icon-button>
+        <div id="price">[[fullPrice(amount)]]</div>
+
+
+    </template>
+    <script>
+        class OrderCartItem extends Polymer.Element {
+            static get is() { return 'order-cart-item' }
+            static get properties() {
+                return {   
+                    amount: {
+                        type: Number,
+                        value: 0
+                    },
+                    price: {
+                        type: Number,
+                        value: NaN
+                    },
+                    none: {
+                        type: Boolean,
+                        computed: "isNone(amount)",
+                        reflectToAttribute: true
+                    }
+                }
+            }
+
+            reduce() {
+                if (this.amount === 0) {
+                    return;
+                }
+                this.amount--;
+            }
+            add() {
+                this.amount++;
+            }
+            fullPrice(amount) {
+                if (this.isNone(amount)) {
+                    return '';
+                }
+                var full = this.price * amount;
+                return full.toFixed(2) + ' €';
+            }
+
+            isNone(amount) {
+                return amount == 0;
+            }
+        }
+        window.customElements.define(OrderCartItem.is, OrderCartItem)
+    </script>
+</dom-module>

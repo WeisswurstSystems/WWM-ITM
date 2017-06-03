@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
@@ -8,13 +8,12 @@
 
 <link rel="import" href="order/order-chip.html">
 <link rel="import" href="order/order-chip-list.html">
-<link rel="import" href="order/order-chip-input.html">
-<link rel="import" href="order/order-chip-edit.html">
+<link rel="import" href="order/order-cart.html">
 
 <dom-module id="wwm-app">
   <template>
     <style>
-      :host {
+       :host {
         --primary-color: var(--paper-orange-500);
         --dark-primary-color: var(--paper-orange-800);
         --secondary-color: var(--paper-green-300);
@@ -33,7 +32,7 @@
 
         background-color: var(--primary-color);
         color: white;
-        @apply(--paper-font-headline);
+        @apply --paper-font-headline;
       }
 
       img {
@@ -41,7 +40,7 @@
         height: 256px;
       }
 
-      order-chip-list + order-chip-list {
+      order-chip-list+order-chip-list {
         border-top: 1px solid var(--paper-grey-100);
       }
 
@@ -50,7 +49,7 @@
         margin-top: 16px;
         background-color: white;
         border-radius: 2px;
-        @apply(--shadow-elevation-2dp);
+        @apply --shadow-elevation-2dp;
       }
 
       @media(min-width: 840px) {
@@ -61,6 +60,7 @@
       }
     </style>
 
+
     <app-header-layout has-scrolling-region fullbleed>
       <app-header fixed slot="header" shadow>
         <app-toolbar id="topbar">
@@ -69,10 +69,10 @@
         <app-toolbar id="bottombar"></app-toolbar>
       </app-header>
 
-      <img src="src/brand/splash.svg">
+      <!-- <img src="src/brand/splash.svg"> -->
 
       <div class="card">
-        <order-chip-edit order="{{order}}"></order-chip-edit>
+        <order-cart order="[[order]]"></order-cart>
       </div>
 
       <div class="card">
@@ -85,28 +85,28 @@
     </app-header-layout>
   </template>
   <script>
+    /**
+     * @customElement
+     * @polymer
+     */
     class WWMApp extends Polymer.Element {
-        static get is() {
-            return 'wwm-app'
+      static get is() { return 'wwm-app' }
+      static get properties() {
+        return {
+          order: {
+            type: Array,
+            value: [
+              { amount: 1, type: 'Weisswurscht' },
+              { amount: 0, type: 'Brezen' },
+            ]
+          }
         }
+      }
 
-
-        static get properties() {
-            return {
-                order: {
-                    type: Array,
-                    value: [
-                        {amount: 1, label: 'Weisswurscht'},
-                        {amount: 1, label: 'Weisswurscht'},
-                    ]
-                }
-            }
-        }
-
-        addOrder(e) {
-            this.push('order', e.detail);
-        }
+      addOrder(e) {
+        this.push('order', e.detail);
+      }
     }
-    customElements.define(WWMApp.is, WWMApp)
+    window.customElements.define(WWMApp.is, WWMApp)
   </script>
 </dom-module>

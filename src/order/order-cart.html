@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="order-cart-item.html">
+
+
+
+<dom-module id="order-cart">
+    <template>
+        <style>
+             :host {
+                display: flex;
+                flex-direction: column;
+            }
+
+            header {
+                margin-left: 16px;
+                color: var(--paper-grey-600);
+                @apply --paper-font-body2;
+            }
+            #save {
+                align-self: flex-end;
+                margin: 2px;
+                color: var(--primary-color);
+            }
+        </style>
+
+        <header>Warenkorb</header>
+        <template is="dom-repeat" items="[[order]]">
+            <order-cart-item amount="[[item.amount]]" price="[[item.price]]">[[item.type]]</order-cart-item>
+        </template>
+
+        <paper-button id="save">SPEICHERN</paper-button>
+
+    </template>
+    <script>
+        class OrderCart extends Polymer.Element {
+            static get is() { return 'order-cart' }
+            static get properties() {
+                return {
+                    order: {
+                        type: Array,
+                        value: [
+                            { type: "Weisswurscht", amount: "3", price: "1.00" },
+                            { type: "Brezen", amount: "2", price: "2.50" }
+                        ]
+                    }
+                }
+            }
+        }
+        window.customElements.define(OrderCart.is, OrderCart)
+    </script>
+</dom-module>
