@@ -1,4 +1,4 @@
-FROM node:8.1.2
+FROM node:4.8
 RUN node install -g bower polymer-cli
 RUN bower i
 EXPOSE 8080
