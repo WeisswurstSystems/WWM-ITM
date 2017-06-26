@@ -4,7 +4,7 @@ RUN npm config set https-proxy $HTTPS_PROXY
 RUN npm install -g bower polymer-cli
 
 RUN mkdir /build
-COPY . /build
+COPY bower.json /build/bower.json
 RUN cd /build/
 RUN bower --allow-root i
 EXPOSE 8080
