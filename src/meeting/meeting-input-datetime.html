@@ -1,0 +1,156 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input-container.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<dom-module id="meeting-input-datetime">
+    <template>
+        <style>
+             :host {
+                display: block
+            }
+
+            input {
+                @apply --paper-input-container-shared-input-style;
+                text-align: center;
+            }
+
+            span[slot="input"] {
+                display: inline-flex;
+                @apply --paper-font-subhead;
+            }
+        </style>
+        <paper-input-container always-float-label>
+            <label slot="label">[[label]]</label>
+            <span slot="input">
+            <iron-input allowed-pattern="[0-9]" bind-value="{{day}}">
+                <input id="day" size="2" maxlength="2" placeholder="dd" on-input="onDay">
+            </iron-input>
+            -
+            <iron-input  allowed-pattern="[0-9]" bind-value="{{month}}">
+                <input id="month"size="2" maxlength="2" placeholder="mm" on-input="onMonth">
+            </iron-input>
+            -
+            <iron-input  allowed-pattern="[0-9]" bind-value="{{year}}">
+                <input id="year" size="4" maxlength="4" placeholder="yyyy" on-input="onYear">
+            </iron-input>
+            <iron-input allowed-pattern="[0-9]" bind-value="{{hour}}">
+                    <input id="hour" size="2" maxlength="2" placeholder="HH" on-input="onHour">
+            </iron-input>
+            :
+            <iron-input allowed-pattern="[0-9]" bind-value="{{minute}}">
+                    <input id="minute" size="2" maxlength="2" placeholder="MM">
+            </iron-input>
+            </span>
+        </paper-input-container>
+
+    </template>
+
+    <script>
+        /**
+         * `meeting-input-datetime` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class MeetingInputDatetime extends Polymer.Element {
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'meeting-input-datetime';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+                    label: String,
+                    today: {
+                        type: Boolean,
+                        value: false,
+                        observer: 'onToday',
+                    },
+                    value: {
+                        type: Date,
+                        notify: true,
+                    },
+                    day: {
+                        type: Number,
+                        value: '',
+                    },
+                    month: {
+                        type: Number,
+                        value: '',
+                    },
+                    year: {
+                        type: Number,
+                        value: '',
+                    },
+                    hour: {
+                        type: Number,
+                        value: '',
+                    },
+                    minute: {
+                        type: Number,
+                        value: '',
+                    },
+                };
+            }
+
+            static get observers() {
+                return [
+                    '_computeValue(day,month,year,hour,minute)'
+                ]
+            }
+            _computeValue(day,month,year,hour,minute) {
+                let date = new Date(year, month, day, hour, minute, 0, 0);
+                this.value = date;
+            }
+
+            onToday(today) {
+                if (today) {
+                    this.setToToday();
+                }
+            }
+
+            setToToday() {
+                let t = new Date();
+                this.day = t.getDay();
+                this.month = t.getMonth();
+                this.year = t.getFullYear();
+            }
+
+            onDay(e) {
+                let day = e.target.value;
+                if (day && day.length == 2) {
+                    this.$.month.select();
+                }
+            }
+            onMonth(e) {
+                let month = e.target.value;
+                if (month && month.length == 2) {
+                    this.$.year.select();
+                }
+            }
+            onYear(e) {
+                let year = e.target.value;
+                if (year && year.length == 4) {
+                    this.$.hour.select();
+                }
+            }
+            onHour(e) {
+                let hour = e.target.value;
+                if (hour && hour.length == 2) {
+                    this.$.minute.select();
+                }
+            }
+
+        }
+
+        window.customElements.define(MeetingInputDatetime.is, MeetingInputDatetime);
+    </script>
+</dom-module>

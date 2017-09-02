@@ -8,7 +8,10 @@
     "paper-styles": "#^2.0.0",
     "paper-icon-button": "#^2.0.0",
     "paper-button": "#^2.0.0",
-    "app-layout": "#^2.0.0"
+    "app-layout": "#^2.0.0",
+    "paper-item": "^2.0.0",
+    "paper-card": "PolymerElements/paper-card#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.2"
   },
   "devDependencies": {
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"

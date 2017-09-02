@@ -9,6 +9,7 @@
 <link rel="import" href="order/order-chip.html">
 <link rel="import" href="order/order-chip-list.html">
 <link rel="import" href="order/order-cart.html">
+<link rel="import" href="assistant/wwm-assistant.html">
 
 <dom-module id="wwm-app">
   <template>
@@ -22,67 +23,79 @@
         --background-color: var(--paper-brown-50);
       }
 
-      #bottombar {
-        display: flex;
+      #menu {
         background-color: var(--dark-primary-color);
-        height: 8px;
+        grid-area: menu;
       }
 
-      #topbar {
-
+      #toolbar {
+        grid-area: toolbar;
         background-color: var(--primary-color);
         color: white;
         @apply --paper-font-headline;
       }
 
-      img {
-        padding-top: 32px;
-        height: 256px;
+      #copyright {
+        grid-area: copyright;
       }
 
-      order-chip-list+order-chip-list {
-        border-top: 1px solid var(--paper-grey-100);
+      #splash {
+        height: 100%;
       }
 
+      @media(min-width: 600px) {
+        :host {
+        display: grid;
 
-      .card {
-        margin-top: 16px;
-        background-color: white;
-        border-radius: 2px;
-        @apply --shadow-elevation-2dp;
-      }
-
-      @media(min-width: 840px) {
-        .card {
-          margin-left: 16.66%;
-          margin-right: 16.66%;
+        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-rows: 64px 64px auto 64px;
+        grid-template-areas: 
+          "toolbar toolbar toolbar"
+          "menu menu menu"
+          ". main assistant"
+          ". copyright copyright"
         }
       }
-    </style>
+      @media(min-width: 1000px) {
+        :host {
+        display: grid;
 
+        grid-template-columns: 196px 2fr 1fr;
+        grid-template-rows: 64px 64px auto 64px;
+        grid-template-areas: 
+          "toolbar toolbar toolbar"
+          "menu main assistant"
+          "menu main ."
+          "menu copyright copyright"
+        }
 
-    <app-header-layout has-scrolling-region fullbleed>
-      <app-header fixed slot="header" shadow>
-        <app-toolbar id="topbar">
+        #menu {
+          height: 100%;
+        }
+      }
+
+      wwm-assistant {
+        grid-area: assistant;
+      }
+
+</style>
+        <app-toolbar id="toolbar">
           <div main-title>WWM</div>
         </app-toolbar>
-        <app-toolbar id="bottombar"></app-toolbar>
-      </app-header>
+        <app-toolbar id="menu">
+          <ul>
+            <li>home</li>
+            <li>other</li>
+          </ul>
+        </app-toolbar>
 
-      <!-- <img src="src/brand/splash.svg"> -->
 
-      <div class="card">
-        <order-cart order="[[order]]"></order-cart>
-      </div>
+      <wwm-assistant></wwm-assistant>
 
-      <div class="card">
-        <order-chip-list order="[[order]]"></order-chip-list>
-        <order-chip-list order="[[order]]"></order-chip-list>
-        <order-chip-list order="[[order]]"></order-chip-list>
-        <order-chip-list order="[[order]]"></order-chip-list>
-      </div>
+      <footer id="copyright">
 
-    </app-header-layout>
+        <img id="splash" src$="[[importPath]]brand/splash.svg">
+      </footer>
   </template>
   <script>
     /**

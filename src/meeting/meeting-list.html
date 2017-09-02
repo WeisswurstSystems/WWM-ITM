@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+
+<link rel="import" href="meeting-list-item.html">
+
+<!--
+`<meeting-list>` is Description
+
+@element meeting-list
+-->
+<dom-module id="meeting-list">
+    <template>
+        <style>
+             :host {
+                display: block
+            }
+        </style>
+
+        <template is="dom-repeat" items="[[meetings]]">
+            <a href="[[baseUri]][[item.id]]" tabindex="-1">
+                <meeting-list-item name="[[item.name]]" datetime="[[item.date]]"
+                place="[[item.place]]"
+                closed="[[item.closed]]" close-date="[[item.closeDate]]"></meeting-list-item>
+            </a>
+        </template>
+    </template>
+
+    <script>
+        class MeetingList extends Polymer.Element {
+
+            static get is() { return 'meeting-list'; }
+
+            static get properties() {
+                return {
+                    meetings: Array,
+                    baseUri: {
+                        type: String,
+                        value: "/meeting/",
+                    }
+                };
+            }
+
+        }
+
+        window.customElements.define(MeetingList.is, MeetingList);
+    </script>
+</dom-module>

@@ -1,0 +1,120 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<link rel="import" href="meeting-input-datetime.html">
+<dom-module id="meeting-create">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+            h2 {
+                @apply --paper-font-subhead;
+            }
+
+            paper-card {
+                width: 100%;
+            }
+
+            .card-actions {
+                display: flex;
+                flex-direction: row-reverse;
+            }
+            #create {
+                color: var(--primary-color, blue);
+            }
+        </style>
+
+
+        <paper-card heading="Meeting erstellen">
+            <div class="card-content">
+                <paper-input label="Ort" value="{{place}}"></paper-input>
+                <meeting-input-datetime today label="Uhrzeit" value="{{date}}"></meeting-input-datetime>
+            </div>
+
+            <div class="card-actions">
+                <paper-button id="create" on-click="create">ERSTELLEN</paper-button>
+            </div>
+        </paper-card>
+        
+
+    </template>
+
+    <script>
+        /**
+         * `meeting-create
+        ` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class MeetingCreate extends Polymer.Element {
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'meeting-create';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+                    place: {
+                        type: String,
+                        value: ''
+                    },
+                    creator: String,
+                    buyer: String,
+                    date: String,
+                };
+            }
+
+            create() {
+                let req = {
+                    meeting: {
+                        place: (this.place || '').trim(),
+                        creator: this.creator,
+                        buyer: this.buyer,
+                        date: this.date,
+                    }
+                };
+
+                fetch("www.asdfiojaweföoiajwefoiajwefojawef.com/echo/json/",
+                {
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify(req)
+                })
+                .then(res => { 
+                    if (res.status != 200) {
+                        this._fail(res);
+                    }
+                    let e = new CustomEvent('message', {detail: 'Meeting erstellt.'});
+                    this.dispatchEvent(e);
+                 })
+                .catch(err => this._fail(err));
+            }
+
+            _fail(err) {
+                console.log('Kann kein Meeting erstellen.');
+                console.log(err);
+                let e = new CustomEvent('error', {detail: 'Kann kein Meeting erstellen.'});
+                this.dispatchEvent(e);
+            }
+        }
+
+        window.customElements.define(MeetingCreate.is, MeetingCreate);
+    </script>
+</dom-module>
