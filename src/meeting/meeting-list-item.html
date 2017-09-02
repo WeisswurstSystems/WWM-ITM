@@ -24,7 +24,7 @@
             <paper-item-body two-line>
                 <span>[[place]]</span>
                 <span secondary>
-                    <span>am [[datetime]], </span>
+                    <span>am [[date]], </span>
                     <span class="green">[[openText(closed)]]</span>
                     <span>[[closedText(closeDate,closed)]]</span>
                 </span>
@@ -40,7 +40,7 @@
 
             static get properties() {
                 return {
-                    datetime: String,
+                    date: String,
                     closeDate: String,
                     place: String,
                     closed: {

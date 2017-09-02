@@ -19,7 +19,7 @@
 
         <template is="dom-repeat" items="[[meetings]]">
             <a href="[[baseUri]][[item.id]]" tabindex="-1">
-                <meeting-list-item name="[[item.name]]" datetime="[[item.date]]"
+                <meeting-list-item date="[[item.date]]"
                 place="[[item.place]]"
                 closed="[[item.closed]]" close-date="[[item.closeDate]]"></meeting-list-item>
             </a>
