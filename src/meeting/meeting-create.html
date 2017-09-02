@@ -15,11 +15,13 @@
             }
 
             h2 {
-                @apply --paper-font-subhead;
+                @apply --paper-font-title;
             }
 
-            paper-card {
-                width: 100%;
+            #place {
+                --paper-input-container-input: {
+                  @apply --paper-font-headline;
+                }
             }
 
             .card-actions {
@@ -31,17 +33,15 @@
             }
         </style>
 
-
-        <paper-card heading="Meeting erstellen">
             <div class="card-content">
-                <paper-input label="Ort" value="{{place}}"></paper-input>
+                <h2>Meeting erstellen</h2>
+                <paper-input id="place" label="Ort" value="{{place}}" always-float-label></paper-input>
                 <meeting-input-datetime today label="Uhrzeit" value="{{date}}"></meeting-input-datetime>
             </div>
 
             <div class="card-actions">
                 <paper-button id="create" on-click="create">ERSTELLEN</paper-button>
             </div>
-        </paper-card>
         
 
     </template>
