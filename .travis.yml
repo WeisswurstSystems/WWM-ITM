@@ -9,7 +9,7 @@ script: polymer build
 deploy:
   provider: pages
   skip_cleanup: true
-  local_dir: build/es6-bundled
+  local_dir: build/es5-bundled
   github_token: "$GITHUB_TOKEN"
   on:
     branch: master
