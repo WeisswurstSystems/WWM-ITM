@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "preset": "es6-bundled"
+      "preset": "es5-bundled"
     }
   ],
   "lint": {
